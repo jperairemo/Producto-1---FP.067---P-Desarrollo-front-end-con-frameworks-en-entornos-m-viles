@@ -1,0 +1,6 @@
+.player-item { cursor: pointer; }
+.player-item.active { background-color: rgba(224,122,47,.15); }
+
+/* hace que el texto del filtro quepa */
+.players-filter { font-size: 1rem; }                 /* tamaño del input */
+.players-filter::placeholder { font-size: 0.95rem; } /* placeholder un pelín menor */

@@ -1,0 +1,35 @@
+<div *ngIf="player as p" class="row g-3">
+  <!-- Cabecera -->
+  <div class="col-12 d-flex justify-content-between align-items-start">
+    <h5 class="mb-0">{{ p.firstName }} {{ p.lastName }}</h5>
+  </div>
+
+  <!-- Avatar + datos -->
+  <div class="col-12">
+    <div class="d-flex align-items-center info-row">
+      <div class="avatar detail-avatar">
+        <img
+          [src]="p.avatar || defaultAvatar"
+          (error)="onImgError($event)"
+          alt=""
+          style="width:100%;height:100%;border-radius:50%;object-fit:cover"
+        />
+      </div>
+      <div>
+        <div>
+          <span class="text-muted me-1">Posición:</span>
+          <span class="fw-semibold">{{ p.position }}</span>
+        </div>
+        <div class="muted">Edad: {{ p.age }}</div>
+        <div class="muted">Altura: {{ p.height | number:'1.2-2' }} m</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Media debajo del avatar -->
+  <div class="col-12 media-section mt-4">
+    <ng-content></ng-content>
+  </div>
+</div>
+
+<div *ngIf="!player" class="text-muted">Selecciona un jugador…</div>
