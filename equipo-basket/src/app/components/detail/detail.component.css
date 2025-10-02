@@ -1,0 +1,23 @@
+/* Tamaño grande para el avatar del detalle */
+.detail-avatar {
+  width: 120px;          /* ajusta a tu gusto: 96, 110, 120… */
+  height: 120px;
+  font-size: 2rem;       /* tamaño del icono si no hay foto */
+}
+
+/* Un poco más de separación entre foto y textos (opcional) */
+.info-row {
+  gap: 1.25rem;          /* 20px aprox */
+}
+
+/* Línea naranja arriba del bloque Media */
+.media-section::before{
+  content: "";
+  display: block;
+  height: 2px;                          /* grosor de la línea */
+  background: var(--brand, #e07a2f);    /* naranja de la app */
+  border-radius: 999px;                 /* puntas redondeadas */
+  width: calc(100% - 2rem);             /* deja margen a ambos lados */
+  margin: 0  auto 1rem;                 /* centrada y con separación abajo */
+  opacity: 1;                           /* evita el 0.25 de <hr> */
+}

@@ -1,11 +1,29 @@
-<div class="container py-4">
-  <h1 class="display-4 text-center text-primary">EQUIPO BASKET</h1>
-  <p class="lead text-center">Bootstrap cargado correctamente</p>
+<!-- app.component.html -->
+<nav class="navbar navbar-expand-lg navbar-dark mb-3" style="background:#e07a2f">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#">EQUIPO BASKET</a>
+  </div>
+</nav>
 
-  <div class="text-center mt-3">
-    <button class="btn btn-success me-2">Aceptar</button>
-    <button class="btn btn-outline-danger">Cancelar</button>
+<div class="container mb-5">
+  <div class="row g-3">
+    <!-- LISTA DE JUGADORES -->
+    <div class="col-md-4">
+      <app-players
+        [players]="players"
+        [activeId]="selectedPlayer?.id"
+        (selected)="onSelect($event)">
+      </app-players>
+    </div>
+
+    <!-- DETALLE + MEDIA -->
+    <div class="col-md-8">
+      <div class="card app-card p-3 h-100">
+        <app-detail [player]="selectedPlayer">
+          <!-- Este contenido se proyecta en <ng-content> dentro de DetailComponent -->
+          <app-media [player]="selectedPlayer"></app-media>
+        </app-detail>
+      </div>
+    </div>
   </div>
 </div>
-
-<router-outlet></router-outlet>
