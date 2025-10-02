@@ -8,7 +8,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   selector: 'app-media',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './media.component.html'
+  templateUrl: './media.component.html',
 })
 export class MediaComponent {
   private _player: Player | null = null;
@@ -49,23 +49,14 @@ export class MediaComponent {
 
   // Normaliza a /embed/, usa dominio nocookie y añade autoplay
   private buildPlayableUrl(url: string): string {
-    let u = url.trim();
+    const key = url.trim(); // 'video1' | 'video2' | 'video3' o una ruta ya armada
 
-    try {
-      const parsed = new URL(u);
-      if (parsed.hostname.includes('youtu.be')) {
-        const id = parsed.pathname.replace('/', '');
-        u = `https://www.youtube.com/embed/${id}`;
-      } else if (parsed.hostname.includes('youtube.com') && parsed.searchParams.get('v')) {
-        const id = parsed.searchParams.get('v') ?? '';
-        u = `https://www.youtube.com/embed/${id}`;
-      }
-    } catch {
-      // si no parsea, seguimos con lo que venga (por si ya es /embed/)
+    // Si ya te llega una URL completa o una ruta a assets, úsala tal cual
+    if (/^https?:\/\//i.test(key) || key.startsWith('assets/')) {
+      return key;
     }
 
-    u = u.replace('https://www.youtube.com/', 'https://www.youtube-nocookie.com/');
-    const sep = u.includes('?') ? '&' : '?';
-    return `${u}${sep}autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1`;
+    // Si te llega 'video1'/'video2'/'video3', construimos la ruta en assets
+    return `assets/videos/${key}.mp4`;
   }
 }

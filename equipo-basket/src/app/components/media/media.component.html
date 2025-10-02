@@ -3,25 +3,41 @@
 
   <!-- Tarjeta de control -->
   <div class="media-box p-3 d-flex align-items-center gap-3" (click)="toggle()">
-    <button class="media-play" [attr.aria-label]="playing ? 'Pausar' : 'Reproducir'">
+    <button
+      class="media-play"
+      [attr.aria-label]="playing ? 'Pausar' : 'Reproducir'"
+    >
       <i class="bi" [ngClass]="playing ? 'bi-pause-fill' : 'bi-play-fill'"></i>
     </button>
     <div>
       <div class="fw-semibold">Jugadas destacadas</div>
       <small class="text-white-50">
-        {{ playing ? 'Reproduciendo… (click para pausar)' : 'Click para reproducir' }}
+        {{
+          playing
+            ? "Reproduciendo… (click para pausar)"
+            : "Click para reproducir"
+        }}
       </small>
     </div>
   </div>
 
   <!-- Reproductor -->
-  <div *ngIf="playing && playUrlSafe" class="ratio ratio-16x9 mt-3 bg-white rounded border">
-    <iframe
+  <div
+    *ngIf="playing && playUrlSafe"
+    class="ratio ratio-16x9 mt-3 bg-white rounded border"
+  >
+    <video
+      *ngIf="playing && playUrlSafe"
       [src]="playUrlSafe"
-      allow="autoplay; encrypted-media; picture-in-picture"
-      allowfullscreen
-      style="border:0"
-    ></iframe>
+      controls
+      autoplay
+      muted
+      playsinline
+      preload="metadata"
+      (ended)="stop()"
+    >
+      Tu navegador no soporta <code>video</code>.
+    </video>
   </div>
 
   <div *ngIf="playing && !playUrlSafe" class="alert alert-warning mt-3">
