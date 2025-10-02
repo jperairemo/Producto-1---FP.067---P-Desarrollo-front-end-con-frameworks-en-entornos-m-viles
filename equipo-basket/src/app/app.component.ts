@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { PLAYERS } from './data/players';
 import { Player } from './models/player.model';
 
-import { PlayersComponent } from './players/players.component';
-import { DetailComponent } from './detail/detail.component';
-import { MediaComponent } from './media/media.component';
+import { PlayersComponent } from './components/players/players.component';
+import { DetailComponent }  from './components/detail/detail.component';
+import { MediaComponent }   from './components/media/media.component';
 import { SafeUrlPipe } from './pipes/safe-url.pipe';
 
 @Component({

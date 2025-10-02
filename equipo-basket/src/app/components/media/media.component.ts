@@ -1,7 +1,7 @@
 // src/app/media/media.component.ts
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Player } from '../models/player.model';
+import { Player } from '../../models/player.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
