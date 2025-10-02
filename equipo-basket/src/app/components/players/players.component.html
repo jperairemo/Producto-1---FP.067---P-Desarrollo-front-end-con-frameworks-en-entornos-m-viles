@@ -4,24 +4,52 @@
     <h5 class="mb-0">Jugadores</h5>
   </div>
 
-  <div class="input-group mb-3">
-    <span class="input-group-text"><i class="bi bi-search"></i></span>
-    <input [(ngModel)]="search" type="text" class="form-control players-filter" placeholder="Filtrar por nombre, posición o edad" />
+  <!-- Filtros: texto + posición (dropdown) -->
+  <div class="mb-2">
+    <div class="input-group">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input
+        [(ngModel)]="search"
+        type="text"
+        class="form-control"
+        placeholder="Buscar por nombre o edad"
+        aria-label="Buscar por nombre o edad"
+      />
+    </div>
   </div>
+
+<div class="mb-3">
+  <select
+    [(ngModel)]="pos"
+    class="form-select"
+    aria-label="Filtrar por posición"
+    title="Filtrar por posición"
+  >
+    <option value="">Todas las posiciones</option>
+    <option *ngFor="let p of positions" [value]="p">{{ p }}</option>
+  </select>
+</div>
 
   <ul class="list-group list-group-flush">
     <li
-      *ngFor="let p of players | playersFilter:search"
+      *ngFor="let p of players | playersFilter: search : pos"
       class="list-group-item d-flex gap-3 align-items-start player-item"
       [class.active]="p.id === activeId"
       (click)="select(p)"
     >
       <div class="avatar">
         <i class="bi bi-person" *ngIf="!p.avatar"></i>
-        <img *ngIf="p.avatar" [src]="p.avatar" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover" />
+        <img
+          *ngIf="p.avatar"
+          [src]="p.avatar"
+          [alt]="'Foto de ' + p.firstName + ' ' + p.lastName"
+          style="width:100%;height:100%;border-radius:50%;object-fit:cover"
+        />
       </div>
       <div>
-        <div class="fw-semibold small">{{ p.firstName }}<br/>{{ p.lastName }}</div>
+        <div class="fw-semibold small">
+          {{ p.firstName }}<br />{{ p.lastName }}
+        </div>
         <div class="muted">{{ p.position }}</div>
       </div>
     </li>

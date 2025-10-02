@@ -11,7 +11,7 @@
     <div class="col-md-4">
       <app-players
         [players]="players"
-        [activeId]="selectedPlayer?.id"
+        [activeId]="selectedPlayer?.id ?? null"
         (selected)="onSelect($event)">
       </app-players>
     </div>
