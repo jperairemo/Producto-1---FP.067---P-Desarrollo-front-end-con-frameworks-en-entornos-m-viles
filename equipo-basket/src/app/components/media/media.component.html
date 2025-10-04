@@ -35,10 +35,9 @@
 
   <!-- Reproductor -->
   <div
-    *ngIf="playUrlSafe"
+    *ngIf="playUrlSafe; else noVideo"
     class="ratio ratio-16x9 mt-3 bg-white rounded border"
   >
-    <!-- *ngIf="playing && playUrlSafe" -->
     <video
       #videoEl
       [src]="playUrlSafe"
@@ -54,15 +53,14 @@
     </video>
   </div>
 
-  <div class="ratio ratio-16x9 mt-3 rounded border bg-light">
-    <div
-      class="w-100 h-100 d-flex align-items-center justify-content-center gap-2 text-muted"
-    >
-      <i class="bi bi-camera-video-off fs-1"></i>
-      <span>Vídeo no disponible</span>
+  <ng-template #noVideo>
+    <div class="ratio ratio-16x9 mt-3 rounded border bg-light">
+      <div
+        class="w-100 h-100 d-flex align-items-center justify-content-center gap-2 text-muted"
+      >
+        <i class="bi bi-camera-video-off fs-1"></i>
+        <span>Vídeo no disponible</span>
+      </div>
     </div>
-  </div>
-  <!-- <div *ngIf="playing && !playUrlSafe" class="alert alert-warning mt-3">
-    No se pudo cargar el vídeo. Revisa la URL del jugador.
-  </div> -->
+  </ng-template>
 </div>
