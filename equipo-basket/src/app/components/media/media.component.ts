@@ -88,7 +88,7 @@ export class MediaComponent {
   private buildPlayableUrl(url: string): string {
     const key = url.trim(); // 'video1' | 'video2' | 'video3' o una ruta ya armada
 
-    // Si ya te llega una URL completa o una ruta a assets, úsala tal cual
+    // Si llega una URL completa o una ruta a assets
     if (/^https?:\/\//i.test(key) || key.startsWith('assets/')) {
       return key;
     }
