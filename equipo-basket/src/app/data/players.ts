@@ -11,7 +11,7 @@ export const PLAYERS: Player[] = [
     avatar: 'avatars/chico1.png',
     // videoUrl: 'https://www.youtube.com/embed//watch?v=vTC1YWbRgD0',
     videoUrl: 'video1',
-    mediaTitle: 'Resumen del jugador'
+    mediaTitle: 'Resumen del jugador',
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ export const PLAYERS: Player[] = [
     avatar: 'avatars/chico2.png',
     // videoUrl: 'https://www.youtube.com/embed/watch?v=j6kUSwU5jZk',
     videoUrl: 'video2',
-    mediaTitle: 'Resumen del jugador'
+    mediaTitle: 'Resumen del jugador',
   },
   {
     id: 3,
@@ -35,7 +35,7 @@ export const PLAYERS: Player[] = [
     avatar: 'avatars/chico3.png',
     // videoUrl: 'https://www.youtube.com/embed/watch?v=53otKJ0O_AI',
     videoUrl: 'video3',
-    mediaTitle: 'Resumen del jugador'
+    mediaTitle: 'Resumen del jugador',
   },
   {
     id: 4,
@@ -47,7 +47,7 @@ export const PLAYERS: Player[] = [
     avatar: 'avatars/chico4.png',
     // videoUrl: 'https://www.youtube.com/embed/watch?v=HKhnBjG0OE4',
     videoUrl: 'video4',
-    mediaTitle: 'Resumen del jugador'
+    mediaTitle: 'Resumen del jugador',
   },
   {
     id: 5,
@@ -59,6 +59,6 @@ export const PLAYERS: Player[] = [
     avatar: 'avatars/chico5.png',
     // videoUrl: 'https://www.youtube.com/embed/watch?v=x6nxF8a3SXg',
     videoUrl: 'video5',
-    mediaTitle: 'Resumen del jugador'
-  }
+    mediaTitle: 'Resumen del jugador',
+  },
 ];
