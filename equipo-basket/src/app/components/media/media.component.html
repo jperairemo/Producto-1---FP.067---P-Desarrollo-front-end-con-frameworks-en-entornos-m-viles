@@ -36,7 +36,7 @@
   <!-- Reproductor -->
   <div
     *ngIf="playUrlSafe; else noVideo"
-    class="ratio ratio-16x9 mt-3 bg-white rounded border"
+    class="ratio ratio-16x9 mt-3 rounded-3 overflow-hidden shadow-lg"
   >
     <video
       #videoEl
@@ -54,7 +54,7 @@
   </div>
 
   <ng-template #noVideo>
-    <div class="ratio ratio-16x9 mt-3 rounded border bg-light">
+    <div class="ratio ratio-16x9 mt-3 rounded-3 overflow-hidden shadow-sm bg-body-secondary">
       <div
         class="w-100 h-100 d-flex align-items-center justify-content-center gap-2 text-muted"
       >
