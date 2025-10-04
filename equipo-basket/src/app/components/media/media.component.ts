@@ -1,5 +1,5 @@
 // src/app/media/media.component.ts
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Player } from '../../models/player.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -13,12 +13,26 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 export class MediaComponent {
   private _player: Player | null = null;
 
+  @ViewChild('videoEl') videoEl?: ElementRef<HTMLVideoElement>; // TODO
+
   @Input() set player(value: Player | null) {
     // Si cambia de jugador, paramos la reproducción anterior
     if (this._player?.id !== value?.id) {
       this.stop();
+      this.playUrlSafe = null; // Esto hace que se resetee la url
     }
     this._player = value;
+
+    // Si no hay video para el nuevo jugador, salimos
+    const videoKey = value?.videoUrl;
+    if (!videoKey) {
+      this.playing = false;
+      return;
+    }
+
+    // Construir y asignar la nueva URL de reproducción
+    const url = this.buildPlayableUrl(videoKey);
+    this.playUrlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
   get player(): Player | null {
     return this._player;
@@ -29,22 +43,45 @@ export class MediaComponent {
 
   constructor(private sanitizer: DomSanitizer) {}
 
+//  Play/Pause usando el <video> nativo (sin reasignar la URL)
   toggle() {
-    if (!this.player?.videoUrl) return;
+    const el = this.videoEl?.nativeElement;
+    if (!this.playUrlSafe || !el) return;
 
     if (this.playing) {
-      this.stop();
-      return;
+      el.pause();
+      this.playing = false;
+    } else {
+      el.play()
+        .then(() => (this.playing = true))
+        .catch(() => (this.playing = false)); // por si el navegador bloquea
     }
+  }
+  // TODO
+  // stop() {
+  //   this.playing = false;
+  //   this.playUrlSafe = null; // quitar iframe = detener
+  // }
 
-    const url = this.buildPlayableUrl(this.player.videoUrl);
-    this.playUrlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    this.playing = true;
+  // NUEVA FUNCION STOP
+  stop() {
+    const el = this.videoEl?.nativeElement;
+    if (el) {
+      el.pause();
+      el.currentTime = 0; // vuelve al inicio
+    }
+    this.playing = false;
+
+    // Si prefieres OCULTAR el reproductor al hacer stop, deja esta línea.
+    // Si quieres mantener el video visible, comenta la línea de abajo.
+    // this.playUrlSafe = null;
   }
 
-  stop() {
+  onNativePlay() {
+    this.playing = true;
+  }
+  onNativePause() {
     this.playing = false;
-    this.playUrlSafe = null; // quitar iframe = detener
   }
 
   // Normaliza a /embed/, usa dominio nocookie y añade autoplay
