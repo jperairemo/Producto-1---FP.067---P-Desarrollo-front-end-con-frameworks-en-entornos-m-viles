@@ -3,28 +3,64 @@
 
   <!-- Tarjeta de control -->
   <div class="media-box p-3 d-flex align-items-center gap-3" (click)="toggle()">
-    <button class="media-play" [attr.aria-label]="playing ? 'Pausar' : 'Reproducir'">
+    <!-- Play / Pause -->
+    <button
+      class="media-play"
+      (click)="toggle(); $event.stopPropagation()"
+      [attr.aria-label]="playing ? 'Pausar' : 'Reproducir'"
+    >
       <i class="bi" [ngClass]="playing ? 'bi-pause-fill' : 'bi-play-fill'"></i>
+    </button>
+
+    <!-- Stop -->
+    <button
+      class="media-play"
+      (click)="stop(); $event.stopPropagation()"
+      [disabled]="!playing"
+      aria-label="Detener"
+    >
+      <i class="bi bi-stop-fill"></i>
     </button>
     <div>
       <div class="fw-semibold">Jugadas destacadas</div>
       <small class="text-white-50">
-        {{ playing ? 'Reproduciendo… (click para pausar)' : 'Click para reproducir' }}
+        {{
+          playing
+            ? "Reproduciendo… (click para pausar)"
+            : "Click para reproducir"
+        }}
       </small>
     </div>
   </div>
 
   <!-- Reproductor -->
-  <div *ngIf="playing && playUrlSafe" class="ratio ratio-16x9 mt-3 bg-white rounded border">
-    <iframe
+  <div
+    *ngIf="playUrlSafe; else noVideo"
+    class="ratio ratio-16x9 mt-3 rounded-3 overflow-hidden shadow-lg"
+  >
+    <video
+      #videoEl
       [src]="playUrlSafe"
-      allow="autoplay; encrypted-media; picture-in-picture"
-      allowfullscreen
-      style="border:0"
-    ></iframe>
+      controls
+      muted
+      playsinline
+      preload="metadata"
+      (play)="onNativePlay()"
+      (pause)="onNativePause()"
+      (ended)="stop()"
+    >
+      Tu navegador no soporta <code>video</code>.
+    </video>
   </div>
 
-  <div *ngIf="playing && !playUrlSafe" class="alert alert-warning mt-3">
-    No se pudo cargar el vídeo. Revisa la URL del jugador.
-  </div>
+  <ng-template #noVideo>
+    <div class="ratio ratio-16x9 mt-3 rounded-3 overflow-hidden shadow-sm bg-body-secondary">
+      <div
+        class="w-100 h-100 d-flex align-items-center justify-content-center gap-2 text-muted"
+      >
+        <i class="bi bi-camera-video-off fs-1"></i>
+        <span>Vídeo no disponible</span>
+      </div>
+    </div>
+  </ng-template>
 </div>

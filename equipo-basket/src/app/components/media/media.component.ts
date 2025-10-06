@@ -1,5 +1,5 @@
 // src/app/media/media.component.ts
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Player } from '../../models/player.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -8,17 +8,31 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   selector: 'app-media',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './media.component.html'
+  templateUrl: './media.component.html',
 })
 export class MediaComponent {
   private _player: Player | null = null;
+
+  @ViewChild('videoEl') videoEl?: ElementRef<HTMLVideoElement>; // TODO
 
   @Input() set player(value: Player | null) {
     // Si cambia de jugador, paramos la reproducción anterior
     if (this._player?.id !== value?.id) {
       this.stop();
+      this.playUrlSafe = null; // Esto hace que se resetee la url
     }
     this._player = value;
+
+    // Si no hay video para el nuevo jugador, salimos
+    const videoKey = value?.videoUrl;
+    if (!videoKey) {
+      this.playing = false;
+      return;
+    }
+
+    // Construir y asignar la nueva URL de reproducción
+    const url = this.buildPlayableUrl(videoKey);
+    this.playUrlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
   get player(): Player | null {
     return this._player;
@@ -29,43 +43,57 @@ export class MediaComponent {
 
   constructor(private sanitizer: DomSanitizer) {}
 
+//  Play/Pause usando el <video> nativo (sin reasignar la URL)
   toggle() {
-    if (!this.player?.videoUrl) return;
+    const el = this.videoEl?.nativeElement;
+    if (!this.playUrlSafe || !el) return;
 
     if (this.playing) {
-      this.stop();
-      return;
+      el.pause();
+      this.playing = false;
+    } else {
+      el.play()
+        .then(() => (this.playing = true))
+        .catch(() => (this.playing = false)); // por si el navegador bloquea
     }
+  }
+  // TODO
+  // stop() {
+  //   this.playing = false;
+  //   this.playUrlSafe = null; // quitar iframe = detener
+  // }
 
-    const url = this.buildPlayableUrl(this.player.videoUrl);
-    this.playUrlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    this.playing = true;
+  // NUEVA FUNCION STOP
+  stop() {
+    const el = this.videoEl?.nativeElement;
+    if (el) {
+      el.pause();
+      el.currentTime = 0; // vuelve al inicio
+    }
+    this.playing = false;
+
+    // Si prefieres OCULTAR el reproductor al hacer stop, deja esta línea.
+    // Si quieres mantener el video visible, comenta la línea de abajo.
+    // this.playUrlSafe = null;
   }
 
-  stop() {
+  onNativePlay() {
+    this.playing = true;
+  }
+  onNativePause() {
     this.playing = false;
-    this.playUrlSafe = null; // quitar iframe = detener
   }
 
   // Normaliza a /embed/, usa dominio nocookie y añade autoplay
   private buildPlayableUrl(url: string): string {
-    let u = url.trim();
+    const key = url.trim(); // 'video1' | 'video2' | 'video3' o una ruta ya armada
 
-    try {
-      const parsed = new URL(u);
-      if (parsed.hostname.includes('youtu.be')) {
-        const id = parsed.pathname.replace('/', '');
-        u = `https://www.youtube.com/embed/${id}`;
-      } else if (parsed.hostname.includes('youtube.com') && parsed.searchParams.get('v')) {
-        const id = parsed.searchParams.get('v') ?? '';
-        u = `https://www.youtube.com/embed/${id}`;
-      }
-    } catch {
-      // si no parsea, seguimos con lo que venga (por si ya es /embed/)
+    // Si llega una URL completa o una ruta a assets
+    if (/^https?:\/\//i.test(key) || key.startsWith('assets/')) {
+      return key;
     }
 
-    u = u.replace('https://www.youtube.com/', 'https://www.youtube-nocookie.com/');
-    const sep = u.includes('?') ? '&' : '?';
-    return `${u}${sep}autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1`;
+    // Si te llega 'video1'/'video2'/'video3', construimos la ruta en assets
+    return `assets/videos/${key}.mp4`;
   }
 }

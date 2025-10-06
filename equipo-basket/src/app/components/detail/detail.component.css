@@ -21,3 +21,39 @@
   margin: 0  auto 1rem;                 /* centrada y con separación abajo */
   opacity: 1;                           /* evita el 0.25 de <hr> */
 }
+
+.detail-avatar { width: 120px; height: 120px; font-size: 2rem; }
+.info-row { gap: 1.25rem; }
+
+/* Línea naranja antes de Media, sin llegar a los bordes */
+.media-section::before{
+  content: "";
+  display: block;
+  height: 6px;
+  background: #e07a2f;
+  border-radius: 999px;
+  width: calc(100% - 2rem);
+  margin: 0 auto 1rem;
+}
+
+/* Botón naranja de marca */
+.btn-brand{
+  background: #e07a2f;        /* naranja fuerte */
+  border-color: #e07a2f;
+  color: #fff;
+}
+.btn-brand:hover{
+  background: #cf6219;        /* un tono más oscuro al pasar */
+  border-color: #c9611b;
+  color: #fff;
+}
+.btn-brand:active{
+  background: #b85619;
+  border-color: #b85619;
+  color: #fff;
+}
+.btn-brand:focus{
+  box-shadow: 0 0 0 .2rem rgba(224,122,47,.35);
+  color: #fff;
+}
+

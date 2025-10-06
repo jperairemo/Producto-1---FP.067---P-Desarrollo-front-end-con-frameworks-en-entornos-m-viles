@@ -1,10 +1,13 @@
 <div *ngIf="player as p" class="row g-3">
-  <!-- Cabecera -->
+  <!-- Cabecera + botón Cerrar -->
   <div class="col-12 d-flex justify-content-between align-items-start">
     <h5 class="mb-0">{{ p.firstName }} {{ p.lastName }}</h5>
+    <button class="btn btn-sm btn-brand" (click)="close()" title="Cerrar detalle">
+      <i class="bi bi-x-lg me-1"></i> Cerrar
+    </button>
   </div>
 
-  <!-- Avatar + datos -->
+  <!-- Avatar + 5 campos -->
   <div class="col-12">
     <div class="d-flex align-items-center info-row">
       <div class="avatar detail-avatar">
@@ -16,10 +19,9 @@
         />
       </div>
       <div>
-        <div>
-          <span class="text-muted me-1">Posición:</span>
-          <span class="fw-semibold">{{ p.position }}</span>
-        </div>
+        <div><span class="text-muted me-1">Nombre:</span> <span class="fw-semibold">{{ p.firstName }}</span></div>
+        <div><span class="text-muted me-1">Apellidos:</span> <span class="fw-semibold">{{ p.lastName }}</span></div>
+        <div><span class="text-muted me-1">Posición:</span> <span class="fw-semibold">{{ p.position }}</span></div>
         <div class="muted">Edad: {{ p.age }}</div>
         <div class="muted">Altura: {{ p.height | number:'1.2-2' }} m</div>
       </div>

@@ -6,9 +6,12 @@
 </nav>
 
 <div class="container mb-5">
-  <div class="row g-3">
-    <!-- LISTA DE JUGADORES -->
-    <div class="col-md-4">
+  <div class="row g-3 align-items-stretch">
+    <!-- LISTA: centrada si no hay selección; más estrecha si la hay -->
+    <div
+      [ngClass]="selectedPlayer ? 'col-lg-4 col-md-5' : 'col-lg-6 col-md-8 mx-auto'"
+      class="transition-col"
+    >
       <app-players
         [players]="players"
         [activeId]="selectedPlayer?.id ?? null"
@@ -16,11 +19,12 @@
       </app-players>
     </div>
 
-    <!-- DETALLE + MEDIA -->
-    <div class="col-md-8">
+    <!-- DETALLE + MEDIA: solo aparece si hay jugador seleccionado -->
+    <div *ngIf="selectedPlayer" class="col-lg-8 col-md-7">
       <div class="card app-card p-3 h-100">
-        <app-detail [player]="selectedPlayer">
-          <!-- Este contenido se proyecta en <ng-content> dentro de DetailComponent -->
+        <app-detail
+          [player]="selectedPlayer"
+          (closed)="onCloseDetail()">
           <app-media [player]="selectedPlayer"></app-media>
         </app-detail>
       </div>
